@@ -2,15 +2,15 @@ let currentData = {};
 let currentTab = 'profile';
 
 // --- Firebase Configuration ---
-// IMPORTANT: Replace this with your own Firebase project config
 const firebaseConfig = {
-    apiKey: "AIzaSyD-YOUR-API-KEY-HERE",
-    authDomain: "your-project.firebaseapp.com",
-    databaseURL: "https://your-project-default-rtdb.firebaseio.com",
-    projectId: "your-project",
-    storageBucket: "your-project.appspot.com",
-    messagingSenderId: "123456789",
-    appId: "1:123456789:web:abcdef"
+    apiKey: "AIzaSyD0ca9eOjegERUeIrSJhMPWHLr8DTX34nM",
+    authDomain: "salam-portfolio-1f9da.firebaseapp.com",
+    databaseURL: "https://salam-portfolio-1f9da-default-rtdb.firebaseio.com",
+    projectId: "salam-portfolio-1f9da",
+    storageBucket: "salam-portfolio-1f9da.firebasestorage.app",
+    messagingSenderId: "548613835942",
+    appId: "1:548613835942:web:173452ab65d315067b3867",
+    measurementId: "G-G0L6D4P87X"
 };
 
 // --- Login ---
