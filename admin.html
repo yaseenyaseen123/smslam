@@ -23,7 +23,7 @@
         }
     </script>
 </head>
-<body class="bg-gray-100 font-sans h-screen overflow-hidden flex flex-col">
+<body class="bg-gray-100 font-sans h-screen flex flex-col overflow-hidden">
 
     <!-- Login Overlay -->
     <div id="login-overlay" class="fixed inset-0 z-50 bg-royal-900 flex items-center justify-center">
@@ -36,20 +36,20 @@
     </div>
 
     <!-- Admin Interface -->
-    <div id="admin-panel" class="flex-1 flex hidden">
+    <div id="admin-panel" class="flex-1 flex hidden h-full overflow-hidden">
         <!-- Sidebar -->
-        <aside class="w-64 bg-royal-900 text-white flex flex-col">
-            <div class="p-6 text-center border-b border-white/10">
+        <aside class="w-64 bg-royal-900 text-white flex flex-col h-full overflow-y-auto">
+            <div class="p-6 text-center border-b border-white/10 shrink-0">
                 <h1 class="text-xl font-bold text-gold-500">لوحة التحكم</h1>
             </div>
-            <nav class="flex-1 p-4 space-y-2">
+            <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
                 <button onclick="switchTab('profile')" class="w-full text-right px-4 py-2 rounded hover:bg-white/10 tab-btn active" data-tab="profile">الملف الشخصي</button>
                 <button onclick="switchTab('socials')" class="w-full text-right px-4 py-2 rounded hover:bg-white/10 tab-btn" data-tab="socials">التواصل الاجتماعي</button>
                 <button onclick="switchTab('programs')" class="w-full text-right px-4 py-2 rounded hover:bg-white/10 tab-btn" data-tab="programs">البرامج</button>
                 <button onclick="switchTab('videos')" class="w-full text-right px-4 py-2 rounded hover:bg-white/10 tab-btn" data-tab="videos">الفيديوهات</button>
                 <button onclick="switchTab('gallery')" class="w-full text-right px-4 py-2 rounded hover:bg-white/10 tab-btn" data-tab="gallery">معرض الصور</button>
             </nav>
-            <div class="p-4 border-t border-white/10 space-y-2">
+            <div class="p-4 border-t border-white/10 space-y-2 shrink-0">
                 <button onclick="openGitHubSettings()" class="w-full bg-gray-700 text-white font-bold py-2 rounded hover:bg-gray-600 transition text-sm">⚙️ إعدادات النشر</button>
                 <button onclick="saveToGitHub()" class="w-full bg-green-600 text-white font-bold py-2 rounded hover:bg-green-500 transition">حفظ ونشر للموقع 🚀</button>
                 <button onclick="downloadData()" class="w-full bg-gold-500 text-royal-900 font-bold py-2 rounded hover:bg-white transition text-sm">تحميل نسخة احتياطية</button>
@@ -57,19 +57,19 @@
         </aside>
 
         <!-- Main Content -->
-        <main class="flex-1 flex overflow-hidden">
+        <main class="flex-1 flex overflow-hidden h-full">
             <!-- Form Area -->
-            <div class="w-1/2 p-8 overflow-y-auto bg-white">
+            <div class="w-1/2 p-8 overflow-y-auto bg-white h-full">
                 <h2 id="section-title" class="text-2xl font-bold mb-6 text-royal-900 border-b pb-2">تعديل البيانات</h2>
-                <div id="form-container">
+                <div id="form-container" class="pb-20">
                     <!-- Forms injected by JS -->
                 </div>
             </div>
 
             <!-- Live Preview Area (Simplified) -->
-            <div class="w-1/2 bg-gray-200 p-8 overflow-y-auto border-r border-gray-300">
+            <div class="w-1/2 bg-gray-200 p-8 overflow-y-auto border-r border-gray-300 h-full">
                 <h2 class="text-xl font-bold mb-4 text-gray-600">معاينة حية (Live Preview)</h2>
-                <div id="preview-container" class="bg-white shadow-lg rounded-lg min-h-[500px] p-4 relative overflow-hidden">
+                <div id="preview-container" class="bg-white shadow-lg rounded-lg min-h-[500px] p-4 relative overflow-hidden pb-20">
                     <!-- Preview content injected by JS -->
                     <div class="absolute inset-0 flex items-center justify-center text-gray-400 pointer-events-none">
                         اختر قسماً للتعديل والمعاينة
