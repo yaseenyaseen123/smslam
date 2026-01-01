@@ -9,7 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
 const firebaseConfig = {
     apiKey: "AIzaSyD0ca9eOjegERUeIrSJhMPWHLr8DTX34nM",
     authDomain: "salam-portfolio-1f9da.firebaseapp.com",
-    databaseURL: "https://salam-portfolio-1f9da-default-rtdb.firebaseio.com",
+    // Try the standard URL format if the default-rtdb one fails
+    databaseURL: "https://salam-portfolio-1f9da-default-rtdb.firebaseio.com", 
     projectId: "salam-portfolio-1f9da",
     storageBucket: "salam-portfolio-1f9da.firebasestorage.app",
     messagingSenderId: "548613835942",
