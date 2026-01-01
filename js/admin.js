@@ -32,6 +32,94 @@ function saveData() {
     // Actually, we update on input, so currentData should be fresh.
 }
 
+// --- GitHub API Integration ---
+let ghConfig = {
+    token: localStorage.getItem('gh_token') || '',
+    owner: localStorage.getItem('gh_owner') || 'yaseenyaseen123',
+    repo: localStorage.getItem('gh_repo') || 'smslam'
+};
+
+function openGitHubSettings() {
+    document.getElementById('github-modal').classList.remove('hidden');
+    document.getElementById('gh-token').value = ghConfig.token;
+    document.getElementById('gh-owner').value = ghConfig.owner;
+    document.getElementById('gh-repo').value = ghConfig.repo;
+}
+
+function saveGitHubSettings() {
+    const token = document.getElementById('gh-token').value;
+    const owner = document.getElementById('gh-owner').value;
+    const repo = document.getElementById('gh-repo').value;
+
+    if (!token) {
+        alert('الرجاء إدخال Token');
+        return;
+    }
+
+    ghConfig = { token, owner, repo };
+    localStorage.setItem('gh_token', token);
+    localStorage.setItem('gh_owner', owner);
+    localStorage.setItem('gh_repo', repo);
+    
+    document.getElementById('github-modal').classList.add('hidden');
+    alert('تم حفظ الإعدادات بنجاح');
+}
+
+async function saveToGitHub() {
+    if (!ghConfig.token) {
+        openGitHubSettings();
+        return;
+    }
+
+    const confirmSave = confirm("هل أنت متأكد من نشر التعديلات للموقع؟ سيتم تحديث الموقع خلال دقائق.");
+    if (!confirmSave) return;
+
+    const path = 'data/data.json';
+    const content = JSON.stringify(currentData, null, 2);
+    const message = 'update: Update site content via Admin Panel';
+
+    try {
+        // 1. Get current SHA
+        const getUrl = `https://api.github.com/repos/${ghConfig.owner}/${ghConfig.repo}/contents/${path}`;
+        const getRes = await fetch(getUrl, {
+            headers: {
+                'Authorization': `token ${ghConfig.token}`,
+                'Accept': 'application/vnd.github.v3+json'
+            }
+        });
+
+        if (!getRes.ok) throw new Error('Failed to fetch file info');
+        const fileData = await getRes.json();
+        const sha = fileData.sha;
+
+        // 2. Update file
+        const putRes = await fetch(getUrl, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `token ${ghConfig.token}`,
+                'Accept': 'application/vnd.github.v3+json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                message: message,
+                content: btoa(unescape(encodeURIComponent(content))), // Handle UTF-8
+                sha: sha
+            })
+        });
+
+        if (putRes.ok) {
+            alert('تم الحفظ والنشر بنجاح! 🚀\nانتظر دقيقة أو دقيقتين ثم حدث الموقع.');
+        } else {
+            const err = await putRes.json();
+            throw new Error(err.message);
+        }
+
+    } catch (error) {
+        console.error(error);
+        alert('حدث خطأ أثناء الحفظ: ' + error.message);
+    }
+}
+
 function downloadData() {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(currentData, null, 2));
     const downloadAnchorNode = document.createElement('a');
@@ -68,7 +156,32 @@ function renderForm() {
         createInput(container, 'المسمى الوظيفي', currentData.profile.title, (v) => currentData.profile.title = v);
         createTextarea(container, 'نبذة قصيرة', currentData.profile.bio_short, (v) => currentData.profile.bio_short = v);
         createTextarea(container, 'نبذة كاملة', currentData.profile.bio_full, (v) => currentData.profile.bio_full = v);
-        createInput(container, 'رابط صورة الغلاف', currentData.profile.hero_image, (v) => currentData.profile.hero_image = v);
+        
+        // Enhanced Image Input
+        const imgContainer = document.createElement('div');
+        imgContainer.className = 'mb-4 p-4 border border-gold-500/30 rounded bg-gold-500/5';
+        imgContainer.innerHTML = `<label class="block text-sm font-bold mb-2 text-royal-900">صورة الغلاف (Hero Image)</label>`;
+        
+        const imgInput = document.createElement('input');
+        imgInput.type = 'text';
+        imgInput.className = 'w-full p-2 border rounded mb-2';
+        imgInput.value = currentData.profile.hero_image;
+        imgInput.placeholder = 'https://...';
+        
+        const imgPreview = document.createElement('img');
+        imgPreview.src = currentData.profile.hero_image;
+        imgPreview.className = 'w-32 h-32 object-cover rounded-full border-4 border-royal-900 mx-auto shadow-lg';
+        
+        imgInput.oninput = (e) => {
+            currentData.profile.hero_image = e.target.value;
+            imgPreview.src = e.target.value;
+            renderPreview();
+        };
+        
+        imgContainer.appendChild(imgInput);
+        imgContainer.appendChild(imgPreview);
+        container.appendChild(imgContainer);
+
         createInput(container, 'نص الشعار', currentData.profile.logo_text, (v) => currentData.profile.logo_text = v);
     } 
     else if (currentTab === 'socials') {

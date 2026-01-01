@@ -49,9 +49,10 @@
                 <button onclick="switchTab('videos')" class="w-full text-right px-4 py-2 rounded hover:bg-white/10 tab-btn" data-tab="videos">الفيديوهات</button>
                 <button onclick="switchTab('gallery')" class="w-full text-right px-4 py-2 rounded hover:bg-white/10 tab-btn" data-tab="gallery">معرض الصور</button>
             </nav>
-            <div class="p-4 border-t border-white/10">
-                <button onclick="downloadData()" class="w-full bg-gold-500 text-royal-900 font-bold py-2 rounded hover:bg-white transition">حفظ وتحميل JSON</button>
-                <p class="text-xs text-gray-400 mt-2 text-center">بعد التحميل، استبدل ملف data.json في المجلد</p>
+            <div class="p-4 border-t border-white/10 space-y-2">
+                <button onclick="openGitHubSettings()" class="w-full bg-gray-700 text-white font-bold py-2 rounded hover:bg-gray-600 transition text-sm">⚙️ إعدادات النشر</button>
+                <button onclick="saveToGitHub()" class="w-full bg-green-600 text-white font-bold py-2 rounded hover:bg-green-500 transition">حفظ ونشر للموقع 🚀</button>
+                <button onclick="downloadData()" class="w-full bg-gold-500 text-royal-900 font-bold py-2 rounded hover:bg-white transition text-sm">تحميل نسخة احتياطية</button>
             </div>
         </aside>
 
@@ -76,6 +77,34 @@
                 </div>
             </div>
         </main>
+    </div>
+
+    <!-- GitHub Settings Modal -->
+    <div id="github-modal" class="fixed inset-0 z-50 bg-black/50 hidden flex items-center justify-center">
+        <div class="bg-white p-6 rounded-lg shadow-xl w-[500px]">
+            <h3 class="text-xl font-bold mb-4 text-royal-900">إعدادات النشر التلقائي (GitHub)</h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-bold mb-1">GitHub Token</label>
+                    <input type="password" id="gh-token" class="w-full p-2 border rounded" placeholder="ghp_...">
+                    <p class="text-xs text-gray-500 mt-1">مطلوب للصلاحية. لا تشاركه مع أحد.</p>
+                </div>
+                <div class="flex gap-4">
+                    <div class="flex-1">
+                        <label class="block text-sm font-bold mb-1">اسم المستخدم (Owner)</label>
+                        <input type="text" id="gh-owner" class="w-full p-2 border rounded" value="yaseenyaseen123">
+                    </div>
+                    <div class="flex-1">
+                        <label class="block text-sm font-bold mb-1">اسم المستودع (Repo)</label>
+                        <input type="text" id="gh-repo" class="w-full p-2 border rounded" value="smslam">
+                    </div>
+                </div>
+            </div>
+            <div class="mt-6 flex justify-end gap-2">
+                <button onclick="document.getElementById('github-modal').classList.add('hidden')" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded">إلغاء</button>
+                <button onclick="saveGitHubSettings()" class="px-4 py-2 bg-royal-900 text-white rounded hover:bg-royal-800">حفظ الإعدادات</button>
+            </div>
+        </div>
     </div>
 
     <script src="js/admin.js"></script>
