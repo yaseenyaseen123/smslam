@@ -1,6 +1,18 @@
 let currentData = {};
 let currentTab = 'profile';
 
+// --- Firebase Configuration ---
+// IMPORTANT: Replace this with your own Firebase project config
+const firebaseConfig = {
+    apiKey: "AIzaSyD-YOUR-API-KEY-HERE",
+    authDomain: "your-project.firebaseapp.com",
+    databaseURL: "https://your-project-default-rtdb.firebaseio.com",
+    projectId: "your-project",
+    storageBucket: "your-project.appspot.com",
+    messagingSenderId: "123456789",
+    appId: "1:123456789:web:abcdef"
+};
+
 // --- Login ---
 function checkPassword() {
     const input = document.getElementById('password-input').value;
@@ -10,8 +22,22 @@ function checkPassword() {
         document.getElementById('admin-panel').classList.remove('hidden');
         document.getElementById('admin-panel').classList.add('flex');
         loadData();
+        initFirebaseAdmin(); // Init Firebase
     } else {
         document.getElementById('login-error').classList.remove('hidden');
+    }
+}
+
+// --- Firebase Admin Logic ---
+let db;
+function initFirebaseAdmin() {
+    try {
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        db = firebase.database();
+    } catch (error) {
+        console.error("Firebase Init Error:", error);
     }
 }
 
@@ -198,7 +224,69 @@ function renderForm() {
     else if (currentTab === 'gallery') {
         renderListForm(container, currentData.gallery, createGalleryInput, true); // true for simple array
     }
+    else if (currentTab === 'guestbook') {
+        renderGuestbookAdmin(container);
+    }
 }
+
+function renderGuestbookAdmin(container) {
+    container.innerHTML = '<div class="text-center text-gray-500">جاري تحميل التعليقات...</div>';
+    
+    if (!db) {
+        container.innerHTML = '<div class="text-red-500">خطأ: لم يتم تهيئة Firebase. تأكد من الإعدادات في الكود.</div>';
+        return;
+    }
+
+    db.ref('guestbook').on('value', (snapshot) => {
+        container.innerHTML = '';
+        const data = snapshot.val();
+        
+        if (!data) {
+            container.innerHTML = '<div class="text-gray-500">لا توجد تعليقات حتى الآن.</div>';
+            return;
+        }
+
+        const comments = Object.entries(data).map(([key, val]) => ({ id: key, ...val }))
+                              .sort((a, b) => b.timestamp - a.timestamp);
+
+        comments.forEach(comment => {
+            const div = document.createElement('div');
+            div.className = 'bg-gray-50 p-4 rounded border border-gray-200 mb-4 relative';
+            div.innerHTML = `
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h4 class="font-bold text-royal-900">${comment.name} <span class="text-xs font-normal text-gray-500">(${comment.email || 'No Email'})</span></h4>
+                        <p class="text-gray-700 mt-1">${comment.message}</p>
+                        <p class="text-xs text-gray-400 mt-1">${new Date(comment.timestamp).toLocaleString('ar-EG')}</p>
+                    </div>
+                    <button onclick="deleteComment('${comment.id}')" class="text-red-500 hover:text-red-700 text-sm font-bold">حذف</button>
+                </div>
+                
+                <div class="mt-3 pt-3 border-t border-gray-200">
+                    <label class="block text-xs font-bold text-gold-500 mb-1">الرد:</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="reply-${comment.id}" value="${comment.reply || ''}" class="flex-1 p-2 border rounded text-sm" placeholder="اكتب ردك هنا...">
+                        <button onclick="saveReply('${comment.id}')" class="bg-royal-900 text-white px-3 py-1 rounded text-sm hover:bg-royal-800">حفظ الرد</button>
+                    </div>
+                </div>
+            `;
+            container.appendChild(div);
+        });
+    });
+}
+
+window.deleteComment = function(id) {
+    if (confirm('هل أنت متأكد من حذف هذا التعليق؟')) {
+        db.ref('guestbook/' + id).remove();
+    }
+};
+
+window.saveReply = function(id) {
+    const replyText = document.getElementById(`reply-${id}`).value;
+    db.ref('guestbook/' + id).update({ reply: replyText }).then(() => {
+        alert('تم حفظ الرد بنجاح');
+    });
+};
 
 // --- Helper: Input Creators ---
 function createInput(parent, label, value, onChange) {
@@ -272,31 +360,23 @@ function renderListForm(parent, list, itemCreator, isSimpleArray = false) {
     parent.appendChild(addBtn);
 }
 
-function createProgramInputs(parent, item, index, list) {
-    createInput(parent, 'العنوان', item.title, (v) => item.title = v);
-    createInput(parent, 'القناة', item.channel, (v) => item.channel = v);
-    createInput(parent, 'الصورة', item.image, (v) => item.image = v);
-    createTextarea(parent, 'الوصف', item.description, (v) => item.description = v);
-}
-
-function createVideoInputs(parent, item, index, list) {
-    createInput(parent, 'العنوان', item.title, (v) => item.title = v);
-    createInput(parent, 'رابط الفيديو', item.url, (v) => item.url = v);
-    createInput(parent, 'صورة مصغرة', item.thumbnail, (v) => item.thumbnail = v);
-}
-
-function createGalleryInput(parent, item, index, list) {
-    createInput(parent, 'رابط الصورة', item, (v) => list[index] = v);
-    const imgPreview = document.createElement('img');
-    imgPreview.src = item;
-    imgPreview.className = 'w-20 h-20 object-cover mt-2 rounded';
-    parent.appendChild(imgPreview);
-}
-
 // --- Preview Rendering ---
 function renderPreview() {
     const container = document.getElementById('preview-container');
     container.innerHTML = '';
+
+    if (currentTab === 'guestbook') {
+        container.innerHTML = `
+            <div class="flex items-center justify-center h-full text-center p-6">
+                <div>
+                    <h3 class="text-xl font-bold text-royal-900 mb-2">معاينة سجل الزوار</h3>
+                    <p class="text-gray-500">التعليقات تظهر مباشرة في الموقع ولا تحتاج إلى معاينة هنا.</p>
+                    <p class="text-sm text-gold-500 mt-4">استخدم القسم الأيمن لإدارة التعليقات والرد عليها.</p>
+                </div>
+            </div>
+        `;
+        return;
+    }
 
     if (currentTab === 'profile') {
         container.innerHTML = `

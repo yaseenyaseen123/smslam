@@ -142,6 +142,37 @@
         </div>
     </section>
 
+    <!-- Guestbook Section -->
+    <section id="guestbook" class="py-20 bg-royal-800/30">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-3xl md:text-4xl font-bold text-gold-500 mb-4">سجل الزوار</h2>
+                <div class="w-20 h-1 bg-gold-500 mx-auto rounded"></div>
+                <p class="text-gray-300 mt-4">اترك رسالة أو تعليقاً للإعلامية سلام حمود</p>
+            </div>
+
+            <div class="max-w-4xl mx-auto">
+                <!-- Comment Form -->
+                <div class="bg-royal-900 p-6 rounded-xl shadow-lg mb-12 border border-white/10 reveal">
+                    <form id="guestbook-form" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <input type="text" id="guest-name" placeholder="الاسم" required class="bg-royal-800 text-white p-3 rounded border border-white/10 focus:border-gold-500 outline-none">
+                            <input type="email" id="guest-email" placeholder="البريد الإلكتروني (لن يظهر للعامة)" class="bg-royal-800 text-white p-3 rounded border border-white/10 focus:border-gold-500 outline-none">
+                        </div>
+                        <textarea id="guest-message" placeholder="اكتب رسالتك هنا..." required rows="4" class="w-full bg-royal-800 text-white p-3 rounded border border-white/10 focus:border-gold-500 outline-none"></textarea>
+                        <button type="submit" class="bg-gold-500 text-royal-900 font-bold py-2 px-8 rounded hover:bg-white transition-colors duration-300">إرسال التعليق</button>
+                    </form>
+                </div>
+
+                <!-- Comments List -->
+                <div id="comments-list" class="space-y-6">
+                    <!-- Comments injected by JS -->
+                    <div class="text-center text-gray-400">جاري تحميل التعليقات...</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Contact Section -->
     <section id="contact" class="py-20 bg-gradient-to-t from-black to-royal-900">
         <div class="container mx-auto px-6 text-center reveal">
@@ -160,6 +191,10 @@
         <p>&copy; <span id="year"></span> جميع الحقوق محفوظة للإعلامية سلام حمود.</p>
     </footer>
 
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    
     <script src="js/main.js"></script>
 </body>
 </html>

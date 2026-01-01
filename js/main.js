@@ -1,8 +1,103 @@
 document.addEventListener('DOMContentLoaded', () => {
     initMobileMenu();
     loadData();
+    initFirebaseGuestbook(); // Initialize Guestbook
     document.getElementById('year').textContent = new Date().getFullYear();
 });
+
+// --- Firebase Configuration ---
+// IMPORTANT: Replace this with your own Firebase project config
+const firebaseConfig = {
+    apiKey: "AIzaSyD-YOUR-API-KEY-HERE",
+    authDomain: "your-project.firebaseapp.com",
+    databaseURL: "https://your-project-default-rtdb.firebaseio.com",
+    projectId: "your-project",
+    storageBucket: "your-project.appspot.com",
+    messagingSenderId: "123456789",
+    appId: "1:123456789:web:abcdef"
+};
+
+// --- Guestbook Logic ---
+function initFirebaseGuestbook() {
+    try {
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.database();
+        const commentsRef = db.ref('guestbook');
+
+        // Listen for new comments
+        commentsRef.on('value', (snapshot) => {
+            const commentsList = document.getElementById('comments-list');
+            commentsList.innerHTML = '';
+            
+            const data = snapshot.val();
+            if (!data) {
+                commentsList.innerHTML = '<div class="text-center text-gray-400">لا توجد تعليقات بعد. كن أول من يكتب!</div>';
+                return;
+            }
+
+            // Convert object to array and sort by timestamp (newest first)
+            const comments = Object.entries(data).map(([key, val]) => ({ id: key, ...val }))
+                                  .sort((a, b) => b.timestamp - a.timestamp);
+
+            comments.forEach(comment => {
+                const div = document.createElement('div');
+                div.className = 'bg-royal-900/50 p-4 rounded border border-white/5 reveal';
+                div.innerHTML = `
+                    <div class="flex justify-between items-start mb-2">
+                        <h4 class="font-bold text-gold-500">${escapeHtml(comment.name)}</h4>
+                        <span class="text-xs text-gray-500">${new Date(comment.timestamp).toLocaleDateString('ar-EG')}</span>
+                    </div>
+                    <p class="text-gray-300 text-sm leading-relaxed">${escapeHtml(comment.message)}</p>
+                    ${comment.reply ? `
+                        <div class="mt-3 mr-4 p-3 bg-gold-500/10 border-r-2 border-gold-500 rounded-l">
+                            <span class="block text-xs text-gold-500 font-bold mb-1">رد من سلام حمود:</span>
+                            <p class="text-gray-400 text-sm">${escapeHtml(comment.reply)}</p>
+                        </div>
+                    ` : ''}
+                `;
+                commentsList.appendChild(div);
+            });
+        });
+
+        // Handle Form Submit
+        document.getElementById('guestbook-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('guest-name').value;
+            const email = document.getElementById('guest-email').value;
+            const message = document.getElementById('guest-message').value;
+
+            const newCommentRef = commentsRef.push();
+            newCommentRef.set({
+                name: name,
+                email: email,
+                message: message,
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+            }).then(() => {
+                alert('شكراً لك! تم إرسال تعليقك بنجاح.');
+                document.getElementById('guestbook-form').reset();
+            }).catch((error) => {
+                console.error("Error writing new message: ", error);
+                alert('حدث خطأ أثناء الإرسال. تأكد من إعدادات Firebase.');
+            });
+        });
+
+    } catch (error) {
+        console.error("Firebase Init Error:", error);
+        document.getElementById('comments-list').innerHTML = '<div class="text-center text-red-400">عذراً، خدمة التعليقات غير مفعلة حالياً (تحتاج إلى إعداد Firebase).</div>';
+    }
+}
+
+function escapeHtml(text) {
+    if (!text) return text;
+    return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
 
 // --- Mobile Menu ---
 function initMobileMenu() {
