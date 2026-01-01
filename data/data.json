@@ -1,0 +1,56 @@
+{
+  "profile": {
+    "name": "سلام حمود",
+    "title": "إعلامية | مقدمة برامج | مدربة صوت",
+    "bio_short": "إعلامية لبنانية بخبرة تزيد عن 15 عاماً، صوت يجمع بين الثقافة والترفيه.",
+    "bio_full": "سلام حمّود إعلامية لبنانية، وُلدت في لبنان ودرست التسويق والعلاقات العامة. بدأت مسيرتها الإعلامية في لبنان، ثم انتقلت للعمل في الكويت، قبل أن تستقر في الإمارات عام 2008 حيث انضمت إلى مؤسسة الرابعة. تتميز بصوتها الواثق وأسلوبها العفوي، وتقدم محتوى يجمع بين الثقافة والترفيه والتنمية البشرية.",
+    "hero_image": "https://placehold.co/600x800/1e1b4b/d4af37?text=Salam+Hammoud",
+    "logo_text": "SALAM HAMMOUD"
+  },
+  "socials": {
+    "instagram": "https://instagram.com/salam_hammoud",
+    "twitter": "https://twitter.com/SalamHam",
+    "facebook": "https://facebook.com/Salam.Hammoud.Anchor",
+    "youtube": "https://youtube.com/@salamhammoud9",
+    "tiktok": "https://www.tiktok.com/@salam_hammoud",
+    "email": "contact@salamhammoud.com"
+  },
+  "programs": [
+    {
+      "title": "عالطريق مع سلام",
+      "channel": "راديو الرابعة 107.8 FM",
+      "description": "برنامج مسائي حواري يناقش قضايا اجتماعية وثقافية ويستضيف شخصيات مؤثرة.",
+      "image": "https://placehold.co/400x300/1e1b4b/d4af37?text=On+The+Road"
+    },
+    {
+      "title": "صحة وحياة",
+      "channel": "تلفزيون عجمان",
+      "description": "برنامج تلفزيوني طبي وصحي يركز على أسلوب الحياة المتوازن.",
+      "image": "https://placehold.co/400x300/1e1b4b/d4af37?text=Health+Life"
+    },
+    {
+      "title": "بودكاست مع سلام",
+      "channel": "يوتيوب / منصات بودكاست",
+      "description": "حوارات عميقة مع شخصيات ملهمة في مجالات متنوعة.",
+      "image": "https://placehold.co/400x300/1e1b4b/d4af37?text=Podcast"
+    }
+  ],
+  "gallery": [
+    "https://placehold.co/400x400/1e1b4b/d4af37?text=Event+1",
+    "https://placehold.co/400x400/1e1b4b/d4af37?text=Studio",
+    "https://placehold.co/400x400/1e1b4b/d4af37?text=Award",
+    "https://placehold.co/400x400/1e1b4b/d4af37?text=Interview"
+  ],
+  "videos": [
+    {
+      "title": "أحدث حلقة من عالطريق",
+      "url": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      "thumbnail": "https://placehold.co/600x340/1e1b4b/d4af37?text=Video+1"
+    },
+    {
+      "title": "مقابلة خاصة",
+      "url": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      "thumbnail": "https://placehold.co/600x340/1e1b4b/d4af37?text=Video+2"
+    }
+  ]
+}

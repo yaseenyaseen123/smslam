@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - سلام حمود</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Cairo', 'sans-serif'],
+                    },
+                    colors: {
+                        gold: { 500: '#d4af37' },
+                        royal: { 800: '#1e1b4b', 900: '#0f0e26' }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-100 font-sans h-screen overflow-hidden flex flex-col">
+
+    <!-- Login Overlay -->
+    <div id="login-overlay" class="fixed inset-0 z-50 bg-royal-900 flex items-center justify-center">
+        <div class="bg-white p-8 rounded-lg shadow-2xl w-96 text-center">
+            <h2 class="text-2xl font-bold mb-6 text-royal-900">تسجيل الدخول</h2>
+            <input type="password" id="password-input" placeholder="كلمة المرور" class="w-full p-3 border border-gray-300 rounded mb-4 focus:outline-none focus:border-gold-500">
+            <button onclick="checkPassword()" class="w-full bg-royal-900 text-white py-3 rounded hover:bg-royal-800 transition">دخول</button>
+            <p id="login-error" class="text-red-500 mt-2 text-sm hidden">كلمة المرور غير صحيحة</p>
+        </div>
+    </div>
+
+    <!-- Admin Interface -->
+    <div id="admin-panel" class="flex-1 flex hidden">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-royal-900 text-white flex flex-col">
+            <div class="p-6 text-center border-b border-white/10">
+                <h1 class="text-xl font-bold text-gold-500">لوحة التحكم</h1>
+            </div>
+            <nav class="flex-1 p-4 space-y-2">
+                <button onclick="switchTab('profile')" class="w-full text-right px-4 py-2 rounded hover:bg-white/10 tab-btn active" data-tab="profile">الملف الشخصي</button>
+                <button onclick="switchTab('socials')" class="w-full text-right px-4 py-2 rounded hover:bg-white/10 tab-btn" data-tab="socials">التواصل الاجتماعي</button>
+                <button onclick="switchTab('programs')" class="w-full text-right px-4 py-2 rounded hover:bg-white/10 tab-btn" data-tab="programs">البرامج</button>
+                <button onclick="switchTab('videos')" class="w-full text-right px-4 py-2 rounded hover:bg-white/10 tab-btn" data-tab="videos">الفيديوهات</button>
+                <button onclick="switchTab('gallery')" class="w-full text-right px-4 py-2 rounded hover:bg-white/10 tab-btn" data-tab="gallery">معرض الصور</button>
+            </nav>
+            <div class="p-4 border-t border-white/10">
+                <button onclick="downloadData()" class="w-full bg-gold-500 text-royal-900 font-bold py-2 rounded hover:bg-white transition">حفظ وتحميل JSON</button>
+                <p class="text-xs text-gray-400 mt-2 text-center">بعد التحميل، استبدل ملف data.json في المجلد</p>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex overflow-hidden">
+            <!-- Form Area -->
+            <div class="w-1/2 p-8 overflow-y-auto bg-white">
+                <h2 id="section-title" class="text-2xl font-bold mb-6 text-royal-900 border-b pb-2">تعديل البيانات</h2>
+                <div id="form-container">
+                    <!-- Forms injected by JS -->
+                </div>
+            </div>
+
+            <!-- Live Preview Area (Simplified) -->
+            <div class="w-1/2 bg-gray-200 p-8 overflow-y-auto border-r border-gray-300">
+                <h2 class="text-xl font-bold mb-4 text-gray-600">معاينة حية (Live Preview)</h2>
+                <div id="preview-container" class="bg-white shadow-lg rounded-lg min-h-[500px] p-4 relative overflow-hidden">
+                    <!-- Preview content injected by JS -->
+                    <div class="absolute inset-0 flex items-center justify-center text-gray-400 pointer-events-none">
+                        اختر قسماً للتعديل والمعاينة
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>
